@@ -3,11 +3,14 @@ package eu.rajniak.chat.conversation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -33,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import eu.rajniak.chat.R
 import eu.rajniak.chat.components.BottomBar
 import eu.rajniak.chat.components.TopBar
+import eu.rajniak.chat.data.FakeData
+import eu.rajniak.chat.data.FakeData.OTHER_AUTHOR
 import eu.rajniak.chat.theme.ChatDemoTheme
 
 @Composable
@@ -68,7 +73,7 @@ fun Toolbar() {
                 contentDescription = "Profile picture"
             )
             Spacer(modifier = Modifier.padding(end = 4.dp))
-            Text(text = "Sarah")
+            Text(text = OTHER_AUTHOR)
         },
         actions = {
             IconButton(onClick = { /* doSomething() */ }) {
@@ -80,7 +85,15 @@ fun Toolbar() {
 
 @Composable
 fun MessageList() {
-    Text("MessageList")
+    LazyColumn(
+        reverseLayout = true,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        itemsIndexed(FakeData.messages) { index: Int, message: Message ->
+            MessageUI(message)
+        }
+    }
 }
 
 @Composable
