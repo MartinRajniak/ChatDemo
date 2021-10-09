@@ -1,4 +1,4 @@
-package eu.rajniak.chat.ui.theme
+package eu.rajniak.chat.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

@@ -9,7 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import eu.rajniak.chat.ui.theme.ChatDemoTheme
+import eu.rajniak.chat.conversation.ConversationUI
+import eu.rajniak.chat.theme.ChatDemoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
             }
             ChatDemoTheme {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
-                    ChatUI()
+                    ConversationUI()
                 }
             }
         }

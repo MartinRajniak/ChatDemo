@@ -1,4 +1,4 @@
-package eu.rajniak.chat.ui.theme
+package eu.rajniak.chat.theme
 
 import androidx.compose.ui.graphics.Color
 
