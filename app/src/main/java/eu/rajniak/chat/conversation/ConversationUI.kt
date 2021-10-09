@@ -1,6 +1,7 @@
 package eu.rajniak.chat.conversation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,9 +11,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -22,9 +25,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +35,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,16 +78,28 @@ fun Toolbar() {
     TopBar(
         navigationIcon = {
             IconButton(onClick = { /* doSomething() */ }) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Filled.KeyboardArrowLeft,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier.size(64.dp)
+                )
             }
         },
         title = {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Profile picture"
+                painter = painterResource(id = R.drawable.sample_avatar),
+                contentDescription = "Profile picture",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.padding(end = 4.dp))
-            Text(text = OTHER_AUTHOR)
+            Spacer(modifier = Modifier.padding(end = 8.dp))
+            Text(
+                text = OTHER_AUTHOR,
+                style = MaterialTheme.typography.h6
+            )
         },
         actions = {
             IconButton(onClick = { /* doSomething() */ }) {
@@ -119,7 +138,9 @@ fun SectionHeader(timeInMillis: Long) {
     val dateTime: LocalDateTime = Instant.ofEpochMilli(timeInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
     val formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("EEEE HH:mm"))
     Text(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         text = formattedDateTime,
         textAlign = TextAlign.Center
     )
@@ -140,8 +161,31 @@ fun TextEntryBox() {
             shape = RoundedCornerShape(32.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        IconButton(onClick = { /* doSomething() */ }) {
-            Icon(Icons.Filled.Send, contentDescription = "Send")
+        IconButton(onClick = { /* doSomething() */ }, enabled = value.isNotBlank()) {
+            Icon(
+                imageVector = Icons.Rounded.Send,
+                contentDescription = "Send",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = if (value.isNotBlank()) {
+                                listOf(
+                                    Color(0xFFFF1278),
+                                    Color(0xFFFE7168)
+                                )
+                            } else {
+                                listOf(
+                                    Color(0x80FF1278),
+                                    Color(0x80FE7168)
+                                )
+                            }
+                        ),
+                        shape = CircleShape
+                    )
+                    .padding(start = 8.dp, end = 4.dp)
+            )
         }
     }
 }
