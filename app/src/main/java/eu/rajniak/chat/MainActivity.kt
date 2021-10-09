@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                 systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
             }
             ChatDemoTheme {
-                ProvideWindowInsets {
+                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                     ChatUI()
                 }
             }
