@@ -70,4 +70,40 @@ internal class MessageListTest {
         assertThat(messageList.isNextMessageMoreThan20SecondsApart(message2)).isFalse
         assertThat(messageList.isNextMessageMoreThan20SecondsApart(message3)).isFalse
     }
+
+    @Test
+    fun isPreviousMessageMoreThanAnHourApart() {
+        val message1 = createMessage(timeInMillis = INITIAL_TIME_IN_MILLIS)
+        val message2 = createMessage(timeInMillis = INITIAL_TIME_IN_MILLIS + TimeUnit.SECONDS.toMillis(21))
+        val message3 = createMessage(timeInMillis = INITIAL_TIME_IN_MILLIS + TimeUnit.HOURS.toMillis(2))
+        val messageList = MessageList(
+            listOf(
+                message2,
+                message1,
+                message3
+            )
+        )
+
+        assertThat(messageList.isPreviousMessageMoreThanAnHourApart(message1)).isFalse
+        assertThat(messageList.isPreviousMessageMoreThanAnHourApart(message2)).isFalse
+        assertThat(messageList.isPreviousMessageMoreThanAnHourApart(message3)).isTrue
+    }
+
+    @Test
+    fun isOldest() {
+        val message1 = createMessage(timeInMillis = INITIAL_TIME_IN_MILLIS)
+        val message2 = createMessage(timeInMillis = INITIAL_TIME_IN_MILLIS + TimeUnit.SECONDS.toMillis(21))
+        val message3 = createMessage(timeInMillis = INITIAL_TIME_IN_MILLIS + TimeUnit.HOURS.toMillis(2))
+        val messageList = MessageList(
+            listOf(
+                message2,
+                message1,
+                message3
+            )
+        )
+
+        assertThat(messageList.isOldest(message1)).isTrue
+        assertThat(messageList.isOldest(message2)).isFalse
+        assertThat(messageList.isOldest(message3)).isFalse
+    }
 }

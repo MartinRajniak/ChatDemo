@@ -24,4 +24,14 @@ constructor(
         }
         return get(index - 1).timeInMillis - message.timeInMillis > TimeUnit.SECONDS.toMillis(20)
     }
+
+    fun isPreviousMessageMoreThanAnHourApart(message: Message): Boolean {
+        val index = indexOf(message)
+        if (index == size - 1) {
+            return false
+        }
+        return message.timeInMillis - get(index + 1).timeInMillis > TimeUnit.HOURS.toMillis(1)
+    }
+
+    fun isOldest(message: Message) = indexOf(message) == size - 1
 }

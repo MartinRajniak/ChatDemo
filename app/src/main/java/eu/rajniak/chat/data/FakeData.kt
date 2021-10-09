@@ -62,6 +62,11 @@ object FakeData {
                 author = OTHER_AUTHOR,
                 text = quotes[0],
                 timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(76)
+            ),
+            Message(
+                author = OTHER_AUTHOR,
+                text = quotes[2],
+                timeInMillis = initialTime - TimeUnit.HOURS.toMillis(2)
             )
         )
     )

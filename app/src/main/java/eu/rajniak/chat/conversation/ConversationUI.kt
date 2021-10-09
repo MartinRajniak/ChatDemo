@@ -3,10 +3,12 @@ package eu.rajniak.chat.conversation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.rajniak.chat.R
@@ -39,6 +42,10 @@ import eu.rajniak.chat.components.TopBar
 import eu.rajniak.chat.data.FakeData
 import eu.rajniak.chat.data.FakeData.OTHER_AUTHOR
 import eu.rajniak.chat.theme.ChatDemoTheme
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ConversationUI() {
@@ -92,12 +99,30 @@ fun MessageListUI() {
     ) {
         val messages = FakeData.messages
         itemsIndexed(messages) { index: Int, message: Message ->
-            val showTail = messages.isMostRecent(message)
-                    || messages.isNextMessageFromDifferentAuthor(message)
-                    || messages.isNextMessageMoreThan20SecondsApart(message)
-            MessageUI(message, showTail)
+            Column {
+                val showSection = messages.isOldest(message) || messages.isPreviousMessageMoreThanAnHourApart(message)
+                if (showSection) {
+                    SectionHeader(message.timeInMillis)
+                }
+
+                val showTail = messages.isMostRecent(message)
+                        || messages.isNextMessageFromDifferentAuthor(message)
+                        || messages.isNextMessageMoreThan20SecondsApart(message)
+                MessageUI(message, showTail, showSection)
+            }
         }
     }
+}
+
+@Composable
+fun SectionHeader(timeInMillis: Long) {
+    val dateTime: LocalDateTime = Instant.ofEpochMilli(timeInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
+    val formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("EEEE HH:mm"))
+    Text(
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        text = formattedDateTime,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable

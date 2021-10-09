@@ -30,7 +30,8 @@ import eu.rajniak.chat.data.FakeData
 @Composable
 fun MessageUI(
     message: Message,
-    showTail: Boolean
+    showTail: Boolean,
+    showSection: Boolean
 ) {
     val currentProfile = remember {
         message.author == FakeData.CURRENT_AUTHOR
@@ -43,7 +44,7 @@ fun MessageUI(
         Row(
             modifier = Modifier
                 .height(IntrinsicSize.Max)
-                .padding(top = 8.dp)
+                .padding(top = if (showSection) 0.dp else 8.dp)
         ) {
             if (showTail && !currentProfile) {
                 Tail(currentProfile)
