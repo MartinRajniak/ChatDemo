@@ -52,7 +52,7 @@ fun ConversationUI() {
             },
         ) { contentPadding ->
             Box(Modifier.padding(contentPadding)) {
-                MessageList()
+                MessageListUI()
             }
         }
     }
@@ -84,14 +84,18 @@ fun Toolbar() {
 }
 
 @Composable
-fun MessageList() {
+fun MessageListUI() {
     LazyColumn(
         reverseLayout = true,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        itemsIndexed(FakeData.messages) { index: Int, message: Message ->
-            MessageUI(message)
+        val messages = FakeData.messages
+        itemsIndexed(messages) { index: Int, message: Message ->
+            val showTail = messages.isMostRecent(message)
+                    || messages.isNextMessageFromDifferentAuthor(message)
+                    || messages.isNextMessageMoreThan20SecondsApart(message)
+            MessageUI(message, showTail)
         }
     }
 }

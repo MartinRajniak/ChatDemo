@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,7 +28,10 @@ import androidx.compose.ui.unit.dp
 import eu.rajniak.chat.data.FakeData
 
 @Composable
-fun MessageUI(message: Message) {
+fun MessageUI(
+    message: Message,
+    showTail: Boolean
+) {
     val currentProfile = remember {
         message.author == FakeData.CURRENT_AUTHOR
     }
@@ -41,8 +45,10 @@ fun MessageUI(message: Message) {
                 .height(IntrinsicSize.Max)
                 .padding(top = 8.dp)
         ) {
-            if (!currentProfile) {
+            if (showTail && !currentProfile) {
                 Tail(currentProfile)
+            } else {
+                Spacer(modifier = Modifier.width(TailWidth))
             }
             Column(
                 modifier = Modifier
@@ -55,8 +61,8 @@ fun MessageUI(message: Message) {
                         shape = RoundedCornerShape(
                             topStart = 16.dp,
                             topEnd = 16.dp,
-                            bottomEnd = if (currentProfile) 0.dp else 16.dp,
-                            bottomStart = if (currentProfile) 16.dp else 0.dp
+                            bottomEnd = if (showTail && currentProfile) 0.dp else 16.dp,
+                            bottomStart = if (!showTail || currentProfile) 16.dp else 0.dp
                         )
                     )
                     .fillMaxWidth(0.75f)
@@ -73,8 +79,10 @@ fun MessageUI(message: Message) {
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
                 )
             }
-            if (currentProfile) {
+            if (showTail && currentProfile) {
                 Tail(currentProfile)
+            } else {
+                Spacer(modifier = Modifier.width(TailWidth))
             }
         }
     }
@@ -88,11 +96,13 @@ fun Tail(currentProfile: Boolean) {
                 color = if (currentProfile) MaterialTheme.colors.primary else MaterialTheme.colors.secondary,
                 shape = if (!currentProfile) StartTriangleEdgeShape(10) else EndTriangleEdgeShape(10)
             )
-            .width(8.dp)
+            .width(TailWidth)
             .fillMaxHeight()
     ) {
     }
 }
+
+private val TailWidth = 8.dp
 
 class StartTriangleEdgeShape(private val offset: Int) : Shape {
 

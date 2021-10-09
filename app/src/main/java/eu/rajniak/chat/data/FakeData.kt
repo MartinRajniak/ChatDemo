@@ -1,12 +1,13 @@
 package eu.rajniak.chat.data
 
 import eu.rajniak.chat.conversation.Message
+import eu.rajniak.chat.conversation.MessageList
 import java.util.concurrent.TimeUnit
 
 object FakeData {
 
     const val CURRENT_AUTHOR = "Martin"
-    const val OTHER_AUTHOR = "Sarah"
+    const val OTHER_AUTHOR = "Andrea"
 
     private val quotes = listOf(
         """Fear is the mind-killer. Fear is the little-death that brings total obliteration.
@@ -25,36 +26,43 @@ object FakeData {
 
     private val initialTime = System.currentTimeMillis()
 
-    val messages = listOf(
-        Message(
-            author = CURRENT_AUTHOR,
-            text = quotes[2],
-            timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(2)
-        ),
-        Message(
-            author = OTHER_AUTHOR,
-            text = quotes[1],
-            timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(10)
-        ),
-        Message(
-            author = CURRENT_AUTHOR,
-            text = quotes[0],
-            timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(30)
-        ),
-        Message(
-            author = CURRENT_AUTHOR,
-            text = quotes[2],
-            timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(32)
-        ),
-        Message(
-            author = OTHER_AUTHOR,
-            text = quotes[1],
-            timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(40)
-        ),
-        Message(
-            author = OTHER_AUTHOR,
-            text = quotes[0],
-            timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(60)
+    val messages = MessageList(
+        listOf(
+            Message(
+                author = CURRENT_AUTHOR,
+                text = quotes[2],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(2)
+            ),
+            Message(
+                author = OTHER_AUTHOR,
+                text = quotes[1],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(10)
+            ),
+            Message(
+                author = CURRENT_AUTHOR,
+                text = quotes[0],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(30)
+            ),
+            Message(
+                author = CURRENT_AUTHOR,
+                text = quotes[2],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(32)
+            ),
+            Message(
+                author = CURRENT_AUTHOR,
+                text = quotes[2],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(60)
+            ),
+            Message(
+                author = OTHER_AUTHOR,
+                text = quotes[1],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(68)
+            ),
+            Message(
+                author = OTHER_AUTHOR,
+                text = quotes[0],
+                timeInMillis = initialTime - TimeUnit.SECONDS.toMillis(76)
+            )
         )
     )
 }
