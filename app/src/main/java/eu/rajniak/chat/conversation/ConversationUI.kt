@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,18 +61,30 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ConversationUI() {
+fun ConversationUI(viewModel: ConversationViewModel) {
+    val messages by viewModel.messages.collectAsState()
+    ConversationUI(
+        messages = messages,
+        onSendClicked = { text -> viewModel.addMessage(text) }
+    )
+}
+
+@Composable
+fun ConversationUI(
+    messages: MessageList,
+    onSendClicked: (String) -> Unit
+) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
         Scaffold(
             topBar = { Toolbar() },
             bottomBar = {
                 BottomBar {
-                    TextEntryBox()
+                    TextEntryBox(onSendClicked)
                 }
             },
         ) { contentPadding ->
             Box(Modifier.padding(contentPadding)) {
-                MessageListUI()
+                MessageListUI(messages)
             }
         }
     }
@@ -115,8 +128,8 @@ fun Toolbar() {
                     imageVector = Icons.Filled.MoreVert,
                     contentDescription = "More",
                     modifier = Modifier
-                            .size(32.dp)
-                            .rotate(90f)
+                        .size(32.dp)
+                        .rotate(90f)
                 )
             }
         }
@@ -124,13 +137,12 @@ fun Toolbar() {
 }
 
 @Composable
-fun MessageListUI() {
+fun MessageListUI(messages: MessageList) {
     LazyColumn(
         reverseLayout = true,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        val messages = FakeData.messages
         itemsIndexed(messages) { index: Int, message: Message ->
             Column {
                 val showSection = messages.isOldest(message) || messages.isPreviousMessageMoreThanAnHourApart(message)
@@ -169,7 +181,7 @@ fun SectionHeader(timeInMillis: Long) {
 }
 
 @Composable
-fun TextEntryBox() {
+fun TextEntryBox(onSendClicked: (String) -> Unit) {
     var value by remember { mutableStateOf("") }
 
     Row(
@@ -183,7 +195,13 @@ fun TextEntryBox() {
             shape = RoundedCornerShape(32.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        IconButton(onClick = { /* doSomething() */ }, enabled = value.isNotBlank()) {
+        IconButton(
+            onClick = {
+                onSendClicked(value)
+                value = ""
+            },
+            enabled = value.isNotBlank()
+        ) {
             Icon(
                 imageVector = Icons.Rounded.Send,
                 contentDescription = "Send",
@@ -216,6 +234,9 @@ fun TextEntryBox() {
 @Composable
 fun DefaultPreview() {
     ChatDemoTheme {
-        ConversationUI()
+        ConversationUI(
+            messages = FakeData.messages,
+            onSendClicked = {}
+        )
     }
 }
