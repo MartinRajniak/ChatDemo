@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -33,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +44,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -56,6 +60,7 @@ import eu.rajniak.chat.ui.components.BottomBar
 import eu.rajniak.chat.ui.components.TopBar
 import eu.rajniak.chat.conversation.FakeData.OTHER_AUTHOR
 import eu.rajniak.chat.ui.theme.ChatDemoTheme
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -77,6 +82,9 @@ fun ConversationUI(
     onSendClicked: (String) -> Unit,
     onFakeReplyClicked: () -> Unit
 ) {
+    val scrollState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
         Scaffold(
             topBar = {
@@ -86,12 +94,19 @@ fun ConversationUI(
             },
             bottomBar = {
                 BottomBar {
-                    TextEntryBox(onSendClicked)
+                    TextEntryBox(
+                        onSendClicked = onSendClicked,
+                        resetScroll = {
+                            scope.launch {
+                                scrollState.scrollToItem(0)
+                            }
+                        }
+                    )
                 }
             },
         ) { contentPadding ->
             Box(Modifier.padding(contentPadding)) {
-                MessageListUI(messages)
+                MessageListUI(messages, scrollState)
             }
         }
     }
@@ -146,8 +161,12 @@ fun Toolbar(
 }
 
 @Composable
-fun MessageListUI(messages: MessageList) {
+fun MessageListUI(
+    messages: MessageList,
+    scrollState: LazyListState
+) {
     LazyColumn(
+        state = scrollState,
         reverseLayout = true,
         modifier = Modifier.fillMaxSize().background(Color.White),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -190,7 +209,11 @@ fun SectionHeader(timeInMillis: Long) {
 }
 
 @Composable
-fun TextEntryBox(onSendClicked: (String) -> Unit) {
+fun TextEntryBox(
+    onSendClicked: (String) -> Unit,
+    resetScroll: () -> Unit = {}
+) {
+    val focusManager = LocalFocusManager.current
     var value by remember { mutableStateOf("") }
 
     Row(
@@ -208,6 +231,11 @@ fun TextEntryBox(onSendClicked: (String) -> Unit) {
             onClick = {
                 onSendClicked(value)
                 value = ""
+
+                // Move scroll to bottom
+                resetScroll()
+                // Remove focus (which also hides keyboard)
+                focusManager.clearFocus()
             },
             enabled = value.isNotBlank()
         ) {
