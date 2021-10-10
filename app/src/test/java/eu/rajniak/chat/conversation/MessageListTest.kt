@@ -14,7 +14,7 @@ internal class MessageListTest {
             author: String = "",
             text: String = "",
             timeInMillis: Long = 0L
-        ) = Message(author, text, timeInMillis)
+        ) = Message(author = author, text = text, timeInMillis = timeInMillis)
     }
 
     @Test
