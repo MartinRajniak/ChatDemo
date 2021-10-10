@@ -1,6 +1,5 @@
 package eu.rajniak.chat.conversation
 
-import eu.rajniak.chat.data.FakeData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -1,14 +1,23 @@
 package eu.rajniak.chat.conversation
 
 import androidx.lifecycle.ViewModel
-import eu.rajniak.chat.data.FakeData
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.viewModelScope
+import eu.rajniak.chat.ChatServiceLocator
+import eu.rajniak.chat.util.WhileViewSubscribed
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class ConversationViewModel: ViewModel() {
+class ConversationViewModel(
+    private val messageStore: MessageStore = ChatServiceLocator.messageStore,
+    private val addMessageUseCase: AddMessageUseCase = AddMessageUseCase()
+): ViewModel() {
 
-    private val _messages = MutableStateFlow(FakeData.messages)
-    val messages: StateFlow<MessageList> = _messages
+    val messages: StateFlow<MessageList> = messageStore
+        .messages()
+        .map { list -> MessageList(list) }
+        .stateIn(viewModelScope, WhileViewSubscribed, MessageList(listOf()))
 
     fun addMessage(text: String) {
         val message = Message(
@@ -29,8 +38,8 @@ class ConversationViewModel: ViewModel() {
     }
 
     private fun addMessage(message: Message) {
-        val originalList = _messages.value
-        val newList = MessageList(originalList.plus(message))
-        _messages.value = newList
+        viewModelScope.launch {
+            addMessageUseCase.invoke(message)
+        }
     }
 }

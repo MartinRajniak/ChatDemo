@@ -12,7 +12,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.rajniak.chat.conversation.ConversationUI
 import eu.rajniak.chat.conversation.ConversationViewModel
-import eu.rajniak.chat.theme.ChatDemoTheme
+import eu.rajniak.chat.ui.theme.ChatDemoTheme
 
 class MainActivity : ComponentActivity() {
 

@@ -50,11 +50,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.rajniak.chat.R
-import eu.rajniak.chat.components.BottomBar
-import eu.rajniak.chat.components.TopBar
-import eu.rajniak.chat.data.FakeData
-import eu.rajniak.chat.data.FakeData.OTHER_AUTHOR
-import eu.rajniak.chat.theme.ChatDemoTheme
+import eu.rajniak.chat.ui.components.BottomBar
+import eu.rajniak.chat.ui.components.TopBar
+import eu.rajniak.chat.conversation.FakeData.OTHER_AUTHOR
+import eu.rajniak.chat.ui.theme.ChatDemoTheme
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

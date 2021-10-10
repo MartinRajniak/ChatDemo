@@ -1,4 +1,4 @@
-package eu.rajniak.chat.components
+package eu.rajniak.chat.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding

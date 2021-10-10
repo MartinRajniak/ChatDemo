@@ -1,4 +1,4 @@
-package eu.rajniak.chat.theme
+package eu.rajniak.chat.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,7 +1,5 @@
-package eu.rajniak.chat.data
+package eu.rajniak.chat.conversation
 
-import eu.rajniak.chat.conversation.Message
-import eu.rajniak.chat.conversation.MessageList
 import java.util.concurrent.TimeUnit
 
 object FakeData {
