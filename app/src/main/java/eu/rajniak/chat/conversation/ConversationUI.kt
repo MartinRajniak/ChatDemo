@@ -36,11 +36,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.rajniak.chat.R
@@ -98,12 +103,21 @@ fun Toolbar() {
             Spacer(modifier = Modifier.padding(end = 8.dp))
             Text(
                 text = OTHER_AUTHOR,
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.subtitle2.copy(
+                    color = MaterialTheme.colors.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
             )
         },
         actions = {
             IconButton(onClick = { /* doSomething() */ }) {
-                Icon(Icons.Filled.MoreVert, contentDescription = "More")
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = "More",
+                    modifier = Modifier
+                            .size(32.dp)
+                            .rotate(90f)
+                )
             }
         }
     )
@@ -136,13 +150,21 @@ fun MessageListUI() {
 @Composable
 fun SectionHeader(timeInMillis: Long) {
     val dateTime: LocalDateTime = Instant.ofEpochMilli(timeInMillis).atZone(ZoneId.systemDefault()).toLocalDateTime()
-    val formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("EEEE HH:mm"))
+    val dayOfTheWeek = dateTime.format(DateTimeFormatter.ofPattern("EEEE"))
+    val time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     Text(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        text = formattedDateTime,
-        textAlign = TextAlign.Center
+        text = buildAnnotatedString {
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                append(dayOfTheWeek)
+            }
+            append(" ")
+            append(time)
+        },
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.subtitle2,
     )
 }
 
