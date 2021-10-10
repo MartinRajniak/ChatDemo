@@ -24,7 +24,7 @@ object FakeData {
 
     private val initialTime = System.currentTimeMillis()
 
-    val messages = MessageList(
+    val previewMessages = MessageList(
         listOf(
             Message(
                 author = CURRENT_AUTHOR,

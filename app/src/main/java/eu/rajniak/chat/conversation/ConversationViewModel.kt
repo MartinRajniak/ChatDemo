@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ConversationViewModel(
-    private val messageStore: MessageStore = ChatServiceLocator.messageStore,
-    private val addMessageUseCase: AddMessageUseCase = AddMessageUseCase()
+    private val addMessageUseCase: AddMessageUseCase = AddMessageUseCase(),
+    messageStore: MessageStore = ChatServiceLocator.messageStore
 ): ViewModel() {
 
     val messages: StateFlow<MessageList> = messageStore

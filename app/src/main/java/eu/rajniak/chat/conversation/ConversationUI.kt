@@ -242,7 +242,7 @@ fun TextEntryBox(onSendClicked: (String) -> Unit) {
 fun DefaultPreview() {
     ChatDemoTheme {
         ConversationUI(
-            messages = FakeData.messages,
+            messages = FakeData.previewMessages,
             onSendClicked = {},
             onFakeReplyClicked = {}
         )

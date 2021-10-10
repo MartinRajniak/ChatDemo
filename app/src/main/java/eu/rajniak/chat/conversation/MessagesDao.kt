@@ -12,6 +12,9 @@ interface MessagesDao {
     @Insert(onConflict = REPLACE)
     fun save(message: Message)
 
+    @Insert(onConflict = REPLACE)
+    fun save(messages: List<Message>)
+
     @Query("SELECT * FROM messages")
     fun loadAll(): Flow<List<Message>>
 }
