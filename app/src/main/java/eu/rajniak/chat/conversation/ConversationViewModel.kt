@@ -16,7 +16,19 @@ class ConversationViewModel: ViewModel() {
             text = text,
             timeInMillis = System.currentTimeMillis()
         )
+        addMessage(message)
+    }
 
+    fun addFakeReply() {
+        val message = Message(
+            author = FakeData.OTHER_AUTHOR,
+            text = FakeData.quotes.random(),
+            timeInMillis = System.currentTimeMillis()
+        )
+        addMessage(message)
+    }
+
+    private fun addMessage(message: Message) {
         val originalList = _messages.value
         val newList = MessageList(originalList.plus(message))
         _messages.value = newList

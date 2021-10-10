@@ -9,7 +9,7 @@ object FakeData {
     const val CURRENT_AUTHOR = "Martin"
     const val OTHER_AUTHOR = "Andrea"
 
-    private val quotes = listOf(
+    val quotes = listOf(
         """Fear is the mind-killer. Fear is the little-death that brings total obliteration.
             |I will face my fear.
             |I will permit it to pass over me and through me.""".trimMargin(),

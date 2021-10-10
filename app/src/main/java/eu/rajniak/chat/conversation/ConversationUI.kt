@@ -65,18 +65,24 @@ fun ConversationUI(viewModel: ConversationViewModel) {
     val messages by viewModel.messages.collectAsState()
     ConversationUI(
         messages = messages,
-        onSendClicked = { text -> viewModel.addMessage(text) }
+        onSendClicked = { text -> viewModel.addMessage(text) },
+        onFakeReplyClicked = { viewModel.addFakeReply() }
     )
 }
 
 @Composable
 fun ConversationUI(
     messages: MessageList,
-    onSendClicked: (String) -> Unit
+    onSendClicked: (String) -> Unit,
+    onFakeReplyClicked: () -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
         Scaffold(
-            topBar = { Toolbar() },
+            topBar = {
+                Toolbar(
+                    onFakeReplyClicked = onFakeReplyClicked
+                )
+            },
             bottomBar = {
                 BottomBar {
                     TextEntryBox(onSendClicked)
@@ -92,7 +98,9 @@ fun ConversationUI(
 
 
 @Composable
-fun Toolbar() {
+fun Toolbar(
+    onFakeReplyClicked: () -> Unit
+) {
     TopBar(
         navigationIcon = {
             IconButton(onClick = { /* doSomething() */ }) {
@@ -123,7 +131,7 @@ fun Toolbar() {
             )
         },
         actions = {
-            IconButton(onClick = { /* doSomething() */ }) {
+            IconButton(onClick = { onFakeReplyClicked() }) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,
                     contentDescription = "More",
@@ -236,7 +244,8 @@ fun DefaultPreview() {
     ChatDemoTheme {
         ConversationUI(
             messages = FakeData.messages,
-            onSendClicked = {}
+            onSendClicked = {},
+            onFakeReplyClicked = {}
         )
     }
 }

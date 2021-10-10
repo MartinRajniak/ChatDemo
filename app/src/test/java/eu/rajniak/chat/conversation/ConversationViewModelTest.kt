@@ -20,4 +20,14 @@ internal class ConversationViewModelTest {
 
         assertThat(viewModel.messages.value).anyMatch { message -> message.text == newMessageText }
     }
+
+    @Test
+    fun addFakeReply() {
+        val originalSize = viewModel.messages.value.size
+        viewModel.addFakeReply()
+
+        val newList = viewModel.messages.value
+        assertThat(newList).hasSize(originalSize + 1)
+        assertThat(newList.last()).matches { message -> message.author == FakeData.OTHER_AUTHOR }
+    }
 }
