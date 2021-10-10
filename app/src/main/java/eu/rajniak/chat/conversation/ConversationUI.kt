@@ -149,10 +149,10 @@ fun Toolbar(
 fun MessageListUI(messages: MessageList) {
     LazyColumn(
         reverseLayout = true,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        modifier = Modifier.fillMaxSize().background(Color.White),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
     ) {
-        itemsIndexed(messages) { index: Int, message: Message ->
+        itemsIndexed(messages) { _: Int, message: Message ->
             Column {
                 val showSection = messages.isOldest(message) || messages.isPreviousMessageMoreThanAnHourApart(message)
                 if (showSection) {
