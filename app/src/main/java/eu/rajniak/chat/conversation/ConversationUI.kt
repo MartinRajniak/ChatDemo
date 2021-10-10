@@ -42,6 +42,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -198,8 +200,8 @@ fun TextEntryBox(onSendClicked: (String) -> Unit) {
         OutlinedTextField(
             value = value,
             onValueChange = { value = it },
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(32.dp)
+            modifier = Modifier.weight(1f).semantics { contentDescription = "Message text field" },
+            shape = RoundedCornerShape(32.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         IconButton(
